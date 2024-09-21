@@ -28,4 +28,4 @@
 <code> sudo pacman -Syu nginx</code>
 <p>После успешной установки nginx были созданы два виртуальных хоста — sadhamster.com и happygiraffe.ru.</p>
 <p>Сначала в файл <code>/etc/hosts</code> были добавлены IP-адреса хостов: </p>
-<code>127.0.1.1  sadhamster.com </code>
+<code>127.0.1.1  sadhamster.com 127.0.1.2  happygiraffe.ru</code>
