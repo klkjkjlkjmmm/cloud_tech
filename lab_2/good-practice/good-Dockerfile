@@ -1,0 +1,12 @@
+FROM python:3.8.10 
+
+RUN apt-get update && \
+    pip install numpy
+
+WORKDIR /home/cloudtech/lab2/good-practice
+COPY ./secret-page .
+
+EXPOSE 8080
+
+ENTRYPOINT ["python3", "-m", "http.server"]
+CMD ["8080"]
