@@ -1,0 +1,10 @@
+FROM python:latest
+
+RUN apt-get update 
+RUN pip3 install numpy
+
+ADD ./secret-page .
+
+EXPOSE 8080
+
+CMD ["python3", "-m", "http.server", "8080"]
