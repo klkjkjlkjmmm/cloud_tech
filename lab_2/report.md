@@ -19,3 +19,8 @@
 </ol>
 
 <h2>Ход работы</h2>
+
+<img width="1300" alt="bad-practice" src="https://github.com/user-attachments/assets/a756ae10-0695-428c-8b72-497d43316b4a">
+<img width="915" alt="bad-practice-result" src="https://github.com/user-attachments/assets/3ad4dd76-5f38-49fc-b127-5da6ae792acf">
+<img width="1300" alt="good-practice" src="https://github.com/user-attachments/assets/a896733f-d80a-4ffc-9847-4a9d0de274a2">
+<img width="900" alt="good-practice-result" src="https://github.com/user-attachments/assets/5e14d4e3-91aa-47f9-b080-17f45f806881">
