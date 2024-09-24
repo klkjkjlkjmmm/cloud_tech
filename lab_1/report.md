@@ -14,13 +14,9 @@
 
 ## Ход работы
 
-Сначала мы долго пытались обновить линукс...очень долго...и очень страшно...
-Далее было необходимо установить nginx:
-```
-sudo pacman -Sy nginx
-```
+~~Сначала мы долго пытались обновить линукс...очень долго...и очень страшно...~~
 
-После успешной установки nginx были созданы два виртуальных хоста — sadhamster.com и happygiraffe.ru.
+Были созданы два виртуальных хоста — sadhamster.com и happygiraffe.ru, информация о которых была добавлена в \etc\hosts
 ```
 127.0.1.1  sadhamster.com
 127.0.1.1  happygiraffe.ru
@@ -37,12 +33,36 @@ include /etc/nginx/sites-enabled/*.conf;
 
 Чтобы настроить соединение по HTTPS, для каждого хоста были созданы самоподписанные сертификаты.
 ```
-openssl req -new -x509 -nodes -newkey rsa:4096 -keyout server.key -out server.crt -days 1095
+mkdir /etc/nginx/ssl
+cd /etc/nginx/ssl
+
+#для первого хоста
+openssl req -new -x509 -nodes -newkey rsa:4096 -keyout happygiraffe.key -out happygiraffe.crt -days 1095
+chmod 400 happygiraffe.key
+chmod 444 happygiraffe.crt
+
+#для второго хоста
+openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sadhamster.key -out sadhamster.crt -days 1095
+chmod 400 sadhamster.key
+chmod 444 sadhamster.crt
 ```
 
 Было настроено принудительное перенаправление HTTP-запросов (порт 80) на HTTPS (порт 443).
+
 ```
-return 301 https://happygiraffe.ru$request_uri;
+#для первого хоста
+server {
+  listen 80;
+  server_name happygiraffe.ru www.happygiraffe.ru;
+  return 301 https://happygiraffe.ru$request_uri;
+}
+
+#для второго хоста
+server {
+  listen 80;
+  server_name sadhamster.com www.sadhamster.com;
+  return 301 https://sadhamster.com$request_uri;
+}
 ```
 
 Для создания псевдонимов путей к файлам или каталогам на сервере использовались алиасы
