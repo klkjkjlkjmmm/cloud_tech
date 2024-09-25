@@ -18,21 +18,17 @@
 
 Были созданы два виртуальных хоста — sadhamster.com и happygiraffe.ru, информация о которых была добавлена в \etc\hosts
 ```
+
 127.0.1.1  sadhamster.com
 127.0.1.1  happygiraffe.ru
-```
 
-Далее в конец файла конфигурации nginx.conf была добавлена строка, позволяющая ДОПИСАТЬ???
 ```
-include /etc/nginx/sites-enabled/*.conf;
-```
-
-Были созданы ```/sites-enabled/``` и ```/sites-available/```, в которой хранятся все конфигурационные файлы виртуальных хостов.
 
 Для каждого виртуального хоста были созданы простые HTML-страницы.
 
 Чтобы настроить соединение по HTTPS, для каждого хоста были созданы самоподписанные сертификаты.
 ```
+
 mkdir /etc/nginx/ssl
 cd /etc/nginx/ssl
 
@@ -45,11 +41,13 @@ chmod 444 happygiraffe.crt
 openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sadhamster.key -out sadhamster.crt -days 1095
 chmod 400 sadhamster.key
 chmod 444 sadhamster.crt
-```
-
-Было настроено принудительное перенаправление HTTP-запросов (порт 80) на HTTPS (порт 443).
 
 ```
+
+В конфигурационных файлах каждого хоста было настроено принудительное перенаправление HTTP-запросов (порт 80) на HTTPS (порт 443).
+
+```
+
 #для первого хоста
 server {
   listen 80;
@@ -63,13 +61,33 @@ server {
   server_name sadhamster.com www.sadhamster.com;
   return 301 https://sadhamster.com$request_uri;
 }
+
 ```
 
-Для создания псевдонимов путей к файлам или каталогам на сервере использовались алиасы
+Для создания псевдонимов путей к файлам или каталогам на сервере использовались алиасы.
+```
 
+# для первого хоста
+location /static/ {
+        alias /srv/www/happygiraffe.ru/images/;
+
+# для второго хоста
+location /hamster/{
+	alias /srv/www/sadhamster.com/images/;
+
+```
+
+При открытии страницы sadhamster.com в браузере открывается простая html-страница. Можно увидеть, что соединение происходит по протоколу HTTPS.
 
 ![image](https://github.com/user-attachments/assets/a39158f6-2511-44b0-8ab9-bc456c2ef67d)
+
+Если открыть картинку в новой вкладке, можно заметить, что для отображения пути использовался установленный алиас.
+
 ![image](https://github.com/user-attachments/assets/a66c5e08-aac6-4773-b00c-70746ef92876)
+
+Аналогично с хостом happygiraffe.ru.
+
 ![image](https://github.com/user-attachments/assets/a15334f1-264b-460b-af99-613ee82971d6)
+
 ![image](https://github.com/user-attachments/assets/595299b1-cadf-417e-94f5-704690d69e4e)
 
