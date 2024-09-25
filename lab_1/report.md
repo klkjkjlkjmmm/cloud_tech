@@ -68,3 +68,8 @@ server {
 Для создания псевдонимов путей к файлам или каталогам на сервере использовались алиасы
 
 
+![image](https://github.com/user-attachments/assets/a39158f6-2511-44b0-8ab9-bc456c2ef67d)
+![image](https://github.com/user-attachments/assets/a66c5e08-aac6-4773-b00c-70746ef92876)
+![image](https://github.com/user-attachments/assets/a15334f1-264b-460b-af99-613ee82971d6)
+![image](https://github.com/user-attachments/assets/595299b1-cadf-417e-94f5-704690d69e4e)
+
