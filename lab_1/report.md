@@ -23,8 +23,17 @@
 127.0.1.1  happygiraffe.ru
 
 ```
-
+В конфигурационном файле Nginx'а была добавлена строка ```include /etc/nginx/sites-enabled/*.conf;```, которая отвечает за просмотр всех конфигурационых файлов в директории sites-enabled с расширением .conf, тем самым "показывая" Nginx'у, что доступные блоки server находятся в ней. 
 Для каждого виртуального хоста были созданы простые HTML-страницы.
+В директории sites-enabled хранятся все виртуальные хосты, которые есть на локальной машине. Директория sites-available хранит в себе те сайты, которые должны обслуживаться Nginx.
+
+После этого были созданы символические ссылки на конфигурационные файлы виртуальных хостов из директории sites-enabled в sites-available.
+```
+
+sudo ln -s /etc/nginx/sites-available/sadhamster.com.conf /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/happygiraffe.ru.conf /etc/nginx/sites-enabled
+
+```
 
 Чтобы настроить соединение по HTTPS, для каждого хоста были созданы самоподписанные сертификаты.
 ```
@@ -34,18 +43,16 @@ cd /etc/nginx/ssl
 
 #для первого хоста
 openssl req -new -x509 -nodes -newkey rsa:4096 -keyout happygiraffe.key -out happygiraffe.crt -days 1095
-chmod 400 happygiraffe.key
-chmod 444 happygiraffe.crt
+chmod 400 happygiraffe.key #чтение только владельцем
+chmod 444 happygiraffe.crt #чтение всеми пользователями
 
 #для второго хоста
 openssl req -new -x509 -nodes -newkey rsa:4096 -keyout sadhamster.key -out sadhamster.crt -days 1095
-chmod 400 sadhamster.key
+chmod 400 sadhamster.key 
 chmod 444 sadhamster.crt
 
 ```
-
 В конфигурационных файлах каждого хоста было настроено принудительное перенаправление HTTP-запросов (порт 80) на HTTPS (порт 443).
-
 ```
 
 #для первого хоста
@@ -54,6 +61,27 @@ server {
   server_name happygiraffe.ru www.happygiraffe.ru;
   return 301 https://happygiraffe.ru$request_uri;
 }
+server {
+    listen 443 ssl;
+    server_name happygiraffe.ru www.happygiraffe.ru;
+    ssl_certificate /etc/nginx/ssl/happygiraffe.crt; #используем самоподписанный сертификат для доступа по HTTPS
+    ssl_certificate_key /etc/nginx/ssl/happygiraffe.key;
+    root /srv/www/happygiraffe.ru;
+    index index.html;
+
+    access_log /var/log/nginx/happygiraffe.ru.access.log; #храним логи получения успешного доступа к сайту
+    error_log /var/log/nginx/happygiraffe.ru.error.log; #храним логи выпавших ошибок
+
+    location / {
+#        try_files $uri $uri/ =404;
+        root /srv/www/happygiraffe.ru;
+        index index.html index.htm;
+   }
+}
+
+```
+Аналогично был создан кофигурационный файл для второго виртуального хоста.
+```
 
 #для второго хоста
 server {
@@ -62,8 +90,23 @@ server {
   return 301 https://sadhamster.com$request_uri;
 }
 
-```
+server {
+    listen 443 ssl;
+    server_name sadhamster.com www.sadhamster.com;
+    ssl_certificate /etc/nginx/ssl/sadhamster.crt;
+    ssl_certificate_key /etc/nginx/ssl/sadhamster.key;
+    root  /srv/www/sadhamster.com;
+    index index.html;
 
+    access_log /var/log/nginx/sadhamster.com.access.log;
+    error_log /var/log/nginx/sadhamster.com.error.log;
+
+    location /{
+        root /srv/www/sadhamster.com;
+        index index.html index.htm;
+    }
+}
+```
 Для создания псевдонимов путей к файлам или каталогам на сервере использовались алиасы.
 ```
 
