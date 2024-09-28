@@ -13,6 +13,10 @@ sudo pacman -Sy kubectl
 ```
 
 ```
+sudo pacman -S minikube
+```
+
+```
 kubectl apply -f /home/plioyee/sadhamster_project/deployment.yaml
 ```
 
