@@ -8,3 +8,4 @@
 
 ## Ход работы
 
+![image](https://github.com/user-attachments/assets/0aa62832-975d-4af9-b7d2-d587476c2321)
