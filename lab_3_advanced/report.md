@@ -15,3 +15,4 @@
 sudo pacman -Sy helm
 ```
 
+![image](https://github.com/user-attachments/assets/863c8983-5de0-4c7d-ba4d-31965a451052)
