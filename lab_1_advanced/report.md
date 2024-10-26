@@ -18,3 +18,9 @@
 ![image](https://github.com/user-attachments/assets/6f60f1cd-536d-4f16-a73f-00517e5a1663)
 
 ## fluf
+
+
+## detectify
+
+![image](https://github.com/user-attachments/assets/64bd01bd-2a00-45c8-b7a4-c0c350f64276)
+
