@@ -12,5 +12,9 @@
 Сначала мы мучились с поднятием nginx на винде.
 
 ### Path-Traversal
+
+Написать про неправильный алиас и вставить код
+
 ![image](https://github.com/user-attachments/assets/6f60f1cd-536d-4f16-a73f-00517e5a1663)
 
+## fluf
