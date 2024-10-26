@@ -10,3 +10,7 @@
 ## Ход работы
 
 Сначала мы мучились с поднятием nginx на винде.
+
+### Path-Traversal
+![image](https://github.com/user-attachments/assets/6f60f1cd-536d-4f16-a73f-00517e5a1663)
+
