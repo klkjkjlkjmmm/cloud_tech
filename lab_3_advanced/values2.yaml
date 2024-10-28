@@ -1,0 +1,25 @@
+# Количество реплик
+replicaCount: 1 
+
+# Настройки образа
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "1.26.2"
+
+# Настройки сервиса
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 30008
+
+# Настройки томов
+volumes:
+  name: html-volume2
+  configMapName: configmap  # Убедитесь, что это имя соответствует вашему ConfigMap
+  mountPath: /usr/share/nginx/html
+
+# Данные для ConfigMap
+htmlConfigMapData: |
+  <html><body><h1>meow meow meow meow (we've been doing this upgrade for the millionth time and we're on the verge of tears rn)</h1></body></html>
