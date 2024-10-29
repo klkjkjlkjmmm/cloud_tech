@@ -19,7 +19,7 @@ sudo pacman -Sy helm
 
 `helm` был установлен!!!
 
-Далее был создан `Chart.yaml`
+Далее был создан helm-chart.
 
 ```
 apiVersion: v2
@@ -30,7 +30,7 @@ version: 0.1.0
 appVersion: "1.26.2"
 ```
 
-После этого на основе лабораторной работы №3 был заполнен  `values.yaml `
+После этого на основе лабораторной работы №3 был заполнен  `values.yaml`.
 
 ```
 replicaCount: 1 
@@ -59,5 +59,24 @@ htmlConfigMapData: |
 
 Также в  `deployment.yaml`, `service.yaml` и `configMap.yaml ` была произведена замена значений на ссылки из `values.yaml`.
 
-После этого было необходимо запустить релиз, но у нас снова возникли проблемы с пробелами в html-документе. Мы горько-горько плакали, а потом решили убрать отступы вообще))))
+После этого было необходимо запустить релиз, но у нас снова возникли проблемы с пробелами в html-документе. ~Мы горько-горько плакали, а потом решили убрать отступы вообще))))~
+
+Созданный `helm chart` был задеплоен в кластер. В браузере открылась html-страница с текстом.
+![image](https://github.com/user-attachments/assets/a600dcac-b860-4ebb-a5d8-bdb0877aa9cc)
+
+Далее было необходимо сделать какие-то изменения и задеплоить новую версию, поэтому было изменено содержимое html-файла.
+```
+htmlConfigMapData: |
+  <html><body><h1>meow meow meow meow (we've been doing this upgrade for the millionth time and we're on the verge of tears rn)</h1></body></html>
+```
+
+С помощью команды 'helm upgrade` была задеплоена новая версия.
+![image](https://github.com/user-attachments/assets/991a17d7-9893-45fb-a858-d7a764c97a1e)
+
+Можно увидеть, что текст на страничке сменился.
+![image](https://github.com/user-attachments/assets/8cd358a2-4847-4382-b3e5-02c459a3dbd7)
+
+
+
+
 
