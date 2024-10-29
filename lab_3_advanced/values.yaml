@@ -1,25 +1,20 @@
-# Количество реплик
 replicaCount: 1 
 
-# Настройки образа
 image:
   repository: nginx
   pullPolicy: IfNotPresent
   tag: "1.26.2"
 
-# Настройки сервиса
 service:
   type: NodePort
   port: 80
   targetPort: 80
   nodePort: 30008
 
-# Настройки томов
 volumes:
   name: html-volume2
-  configMapName: configmap  # Убедитесь, что это имя соответствует вашему ConfigMap
+  configMapName: configmap 
   mountPath: /usr/share/nginx/html
 
-# Данные для ConfigMap
 htmlConfigMapData: |
   <html><body><h1>HELLO WORLD !!11!1!1!1!1!!!!!!!!</h1></body></html>
