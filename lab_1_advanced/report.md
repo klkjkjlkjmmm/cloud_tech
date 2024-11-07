@@ -18,7 +18,7 @@
 ![image](https://github.com/user-attachments/assets/6f60f1cd-536d-4f16-a73f-00517e5a1663)
 
 ## fluf
-
+https://habr.com/ru/companies/skillfactory/articles/810293/
 Сначала было необходимо установить `ffuf` на ноутбук, а также скачать необходимые словари.
 ```
 git clone --depth 1 https://github.com/danielmiessler/SecLists.git
@@ -44,5 +44,8 @@ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
 
 ## detectify
 
-![image](https://github.com/user-attachments/assets/64bd01bd-2a00-45c8-b7a4-c0c350f64276)
+https://habr.com/ru/companies/cloud4y/articles/547164/
+
+![image](https://github.com/user-attachments/assets/adfaf8f0-ccbf-4b9e-a505-83554d86c40a)
+
 
