@@ -19,6 +19,28 @@
 
 ## fluf
 
+Сначала было необходимо установить `ffuf` на ноутбук, а также скачать необходимые словари.
+```
+git clone --depth 1 https://github.com/danielmiessler/SecLists.git
+```
+
+### Fuzzing каталогов
+Сначала мы попробовали поискать скрытые каталоги и файлы. На скриншоте представлен результат сканирования.
+![image](https://github.com/user-attachments/assets/48b4ac50-d666-4d8a-86e6-8057b34faeeb)
+
+Можно увидеть, что существует директория styles. Переход по адресу `krysyatnik1.com/styles` результата не дает, так как нет прав доступа.
+![image](https://github.com/user-attachments/assets/82f8dc6c-173a-4c74-8e7b-8b2cd187f6eb)
+
+Далее было необходимо узнать, какой тип страниц использует веб-сервер. С помощью веб-фаззинга было выяснено, что это html-страницы.
+![image](https://github.com/user-attachments/assets/8e7fa930-35dc-4ad5-8551-42c55adea0ad)
+
+Но скрытых html-страниц обнаружено не было.
+![image](https://github.com/user-attachments/assets/7937b2e7-1174-4734-b41f-fc2ed55cd3ec)
+
+
+Также было проведено сканирование на поддомены. Их обнаружено не было.
+![image](https://github.com/user-attachments/assets/92ac1197-caa8-4ecd-abec-a7c91b689938)
+
 
 ## detectify
 
