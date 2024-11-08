@@ -59,6 +59,64 @@ htmlConfigMapData: |
 
 Также в  `deployment.yaml`, `service.yaml` и `configMap.yaml ` была произведена замена значений на ссылки из `values.yaml`.
 
+```
+#deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-deployment
+spec:
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-nginx
+  replicas: {{.Values.replicaCount}}
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: "{{.Values.image.repository}}:{{.Values.image.tag}}"
+        imagePullPolicy: {{.Values.image.pullPolicy}}
+        ports:
+        - containerPort: {{.Values.service.port}}
+        volumeMounts:
+        - name: {{.Values.volumes.name}}
+          mountPath: {{.Values.volumes.mountPath}}
+      volumes:
+      - name: {{.Values.volumes.name}}
+        configMap:
+          name: {{.Values.volumes.configMapName}}
+```
+
+```
+#service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Release.Name}}-service
+spec:
+  type: {{.Values.service.type}}
+  selector:
+    app: {{.Release.Name}}-nginx
+  ports:
+    - port: {{.Values.service.port}}
+      targetPort: {{.Values.service.targetPort}}
+      nodePort: {{.Values.service.nodePort}}
+```
+
+```
+#configMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.volumes.configMapName}}
+data:
+  index.html: |
+    {{.Values.htmlConfigMapData}}
+```
+
 После этого было необходимо запустить релиз, но у нас снова возникли проблемы с пробелами в html-документе. ~Мы горько-горько плакали(((~
 
 Созданный `helm chart` был задеплоен в кластер. В браузере открылась html-страница с текстом.
