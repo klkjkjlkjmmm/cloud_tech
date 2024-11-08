@@ -60,7 +60,7 @@ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
 
 
 ### nmap
-Также мы решили воспользоваться сканером уязвимостей nmap.
+Также мы решили воспользоваться сканером уязвимостей nmap ~~, с которым всех нас познакомили лабы по инфобезу в этом году))~~.
 Используя специальные скрипты http-vuln*, нам удалось выяснить, что веб-сервер уязвим к атакам типа DDOS.
 
 ![{3707542C-5448-4AB6-883D-ED8F7FB8ACA7}](https://github.com/user-attachments/assets/5b08a76c-debc-4ca3-bd18-1a6fbe6e738f)
