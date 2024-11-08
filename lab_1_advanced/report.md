@@ -9,43 +9,70 @@
 
 ## Ход работы
 
-Сначала мы мучились с поднятием nginx на винде.
+Для выполнения работы был взят nginx команды №6.
+
+![{3CD518A9-92E7-4504-A95C-31D010ADDD67}](https://github.com/user-attachments/assets/f4e5db40-b3bf-46f1-8b8f-844fe6fd1bc7)
 
 ### Path-Traversal
+Первой была рассмотрена уязвимость Path-Traversal.
+В конфиг-файле была замечена ошибка - отсутствие слэша в `location /styles`. Это может позволить злоумышленнику использовать относительные пути для доступа к файлам вне корневой директории веб-приложения.
 
-Написать про неправильный алиас и вставить код
+```
+location /styles {
+        alias "C:/Users/Ангелина/Downloads/nginx-1.27.1/nginx-1.27.1/html/styles/"; 
+        }
+```
+Например, нам удалось достучаться до дефолтной страницы index.html nginx-а, которая находится в каталоге выше styles.
 
 ![image](https://github.com/user-attachments/assets/6f60f1cd-536d-4f16-a73f-00517e5a1663)
 
-## fluf
-https://habr.com/ru/companies/skillfactory/articles/810293/
-Сначала было необходимо установить `ffuf` на ноутбук, а также скачать необходимые словари.
+Чтобы недопустить такой ситуации, стоит исправить конфиг следующим образом:
+
+```
+location /styles/ {
+        alias "C:/Users/Ангелина/Downloads/nginx-1.27.1/nginx-1.27.1/html/styles/"; 
+        }
+```
+
+### fluf
+Далее мы попробовали осуществить фаззинг каталогов с помощью ffuf. Для этого было необходимо скачать ffuf, а также загрузить специальные словари, по которым будет осуществляться перебор.
+
 ```
 git clone --depth 1 https://github.com/danielmiessler/SecLists.git
 ```
-
-### Fuzzing каталогов
 Сначала мы попробовали поискать скрытые каталоги и файлы. На скриншоте представлен результат сканирования.
+
 ![image](https://github.com/user-attachments/assets/48b4ac50-d666-4d8a-86e6-8057b34faeeb)
 
-Можно увидеть, что существует директория styles. Переход по адресу `krysyatnik1.com/styles` результата не дает, так как нет прав доступа.
+Можно увидеть, что существует директория styles. Просмотреть содержимое директории невозможно, так как на это нет прав доступа.
+
 ![image](https://github.com/user-attachments/assets/82f8dc6c-173a-4c74-8e7b-8b2cd187f6eb)
 
 Далее было необходимо узнать, какой тип страниц использует веб-сервер. С помощью веб-фаззинга было выяснено, что это html-страницы.
+
 ![image](https://github.com/user-attachments/assets/8e7fa930-35dc-4ad5-8551-42c55adea0ad)
 
-Но скрытых html-страниц обнаружено не было.
+Но скрытых html-страниц в директории `styles` обнаружено не было.
+
 ![image](https://github.com/user-attachments/assets/7937b2e7-1174-4734-b41f-fc2ed55cd3ec)
 
+Так как каталог называется `styles`, мы решили проверить директорию на наличие .css-файлов.
 
-Также было проведено сканирование на поддомены. Их обнаружено не было.
-![image](https://github.com/user-attachments/assets/92ac1197-caa8-4ecd-abec-a7c91b689938)
+![{09AFC753-0152-4057-8C62-F205F491AECC}](https://github.com/user-attachments/assets/63c09f8c-b98c-44c8-9a85-4891db36d12d)
+
+Таким образом, нам удалось получить доступ к файлу `styles.css.`
+
+![{AF3743D2-339D-4E49-BD26-961E2EBF4E45}](https://github.com/user-attachments/assets/49e6d92f-d357-492c-a045-b945c61e43e5)
 
 
-## detectify
+### nmap
+Также мы решили воспользоваться сканером уязвимостей nmap.
+Используя специальные скрипты http-vuln*, нам удалось выяснить, что веб-сервер уязвим к атакам типа DDOS.
 
-https://habr.com/ru/companies/cloud4y/articles/547164/
+![{3707542C-5448-4AB6-883D-ED8F7FB8ACA7}](https://github.com/user-attachments/assets/5b08a76c-debc-4ca3-bd18-1a6fbe6e738f)
 
-![image](https://github.com/user-attachments/assets/adfaf8f0-ccbf-4b9e-a505-83554d86c40a)
+Также была осуществлена проверка на наличие заголовков безопасности. Можно увидеть, что на сервере не настроен заголовок Strict-Transport-Security. Его отсутствие позволяет браузерам использовать незащищенное HTTP-соединение, что делает веб-сайт уязвимым к атакам (например, к атаке MiTM).
+
+![{797ADF58-29E5-4C68-8981-67600C8AEC36}](https://github.com/user-attachments/assets/919c3db2-247d-485b-9980-8dc640d62a67)
 
 
