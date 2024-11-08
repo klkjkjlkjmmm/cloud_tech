@@ -48,7 +48,7 @@ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
 
 ![image](https://github.com/user-attachments/assets/82f8dc6c-173a-4c74-8e7b-8b2cd187f6eb)
 
-Далее было необходимо узнать, какой тип страниц использует веб-сервер. С помощью веб-фаззинга было выяснено, что это html-страницы.
+Далее было необходимо узнать, какой тип страниц использует веб-сервер. С помощью фаззинга было выяснено, что это html-страницы.
 
 ![image](https://github.com/user-attachments/assets/8e7fa930-35dc-4ad5-8551-42c55adea0ad)
 
@@ -60,7 +60,7 @@ git clone --depth 1 https://github.com/danielmiessler/SecLists.git
 
 ![{09AFC753-0152-4057-8C62-F205F491AECC}](https://github.com/user-attachments/assets/63c09f8c-b98c-44c8-9a85-4891db36d12d)
 
-Таким образом, нам удалось получить доступ к файлу `styles.css.`
+Таким образом, нам удалось получить доступ к файлу `styles.css`.
 
 ![{AF3743D2-339D-4E49-BD26-961E2EBF4E45}](https://github.com/user-attachments/assets/49e6d92f-d357-492c-a045-b945c61e43e5)
 
