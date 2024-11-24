@@ -9,36 +9,72 @@
 
 Сначала мы долго пытались начать делать лабу.
 
-1. установить репозиторий хелм-чартов
+1. сначала мы установили nginx-ingress
+
+```
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+helm install my-nginx nginx-stable/nginx-ingress
+```
+
+
+2. добавим чтобы следить
+```
+controller:
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
+```
+3. прометеус
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
+4. сервис монитор
 ```
-![image](https://github.com/user-attachments/assets/0381e653-ed78-418d-88e4-13163f9dbd73)
-
-2. установить Prometheus и Grafana с использованием чарта kube-prometheus-stack
-тут мы поняли что сначала стоило бы включить миникуб
-
-![image](https://github.com/user-attachments/assets/91408bfe-548c-4958-b605-20c50663256d)
-
-
-3. после установки нужно сделать переадресацию портов для доступа к интерфейсам графаны и прометеуса
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nginx-servicemonitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: metrics
+    interval: 30s
+```
 
 ```
-kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
-```
-![image](https://github.com/user-attachments/assets/f24d1021-53b2-4d7b-aa21-d6bbcae55d8b)
-
-```
-kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090
+kubectl apply -f nginx-servicemonitor.yaml
 ```
 
-![image](https://github.com/user-attachments/assets/33ee61cb-6bad-42c2-b562-e443986ba2d8)
 
 
-4. настройка графана
-потом нужно было настроить графану; так как мы устанавливали через куб-прометеус-стак, то пароль был не админ-админ, а админ-prom operator (петь как smooth operator от sade)
-![image](https://github.com/user-attachments/assets/8f5e8569-e4e2-4343-bb3f-d240059cfae5)
+5. графана
+```
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+```
+helm install grafana grafana/grafana
+```
 
-5. 
+```
+kubectl get secret grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+```
+kubectl port-forward service/grafana 3000:80
+```
+
+
+    
 
