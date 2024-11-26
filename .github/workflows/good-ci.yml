@@ -1,0 +1,43 @@
+name: Good CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --prefix lab_4
+
+      - name: Run tests
+        id: test_step
+        run: npm test --prefix lab_4
+        continue-on-error: false
+
+      - name: Deploy to production
+        if: ${{ success() }}
+        env:
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+        run: |
+          echo "Начинаем деплой..."
+          echo "Успешно задеплоили!"  
+
+      - name: Notify deployment status
+        if: ${{ success() }}
+        run: echo "Все гуд!"
+        
+      - name: Notify on failure
+        if: ${{ failure() }}
+        run: echo "Что-то пошло не так, проверяйте тесты!"
