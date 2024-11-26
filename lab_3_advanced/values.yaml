@@ -1,0 +1,20 @@
+replicaCount: 1 
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "1.26.2"
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 30008
+
+volumes:
+  name: html-volume2
+  configMapName: configmap 
+  mountPath: /usr/share/nginx/html
+
+htmlConfigMapData: |
+  <html><body><h1>HELLO WORLD !!11!1!1!1!1!!!!!!!!</h1></body></html>

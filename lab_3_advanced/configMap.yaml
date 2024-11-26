@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.volumes.configMapName}}
+data:
+  index.html: |
+    {{.Values.htmlConfigMapData}}
