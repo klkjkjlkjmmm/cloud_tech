@@ -25,20 +25,16 @@ jobs:
         run: |
           echo "Fetching secret from HashiCorp Vault..."
 
-          AUTH_RESPONSE=$(curl -s --request POST \
-            --url "https://api.cloud.hashicorp.com/v1/oauth/token" \
-            --header "Content-Type: application/json" \
-            --data '{
-              "client_id": "'"$HCP_CLIENT_ID"'",
-              "client_secret": "'"$HCP_CLIENT_SECRET"'",
-              "grant_type": "client_credentials"
-            }')
-
-          ACCESS_TOKEN=$(echo $AUTH_RESPONSE | jq -r '.access_token')
+          HCP_API_TOKEN=$(curl --location "https://auth.idp.hashicorp.com/oauth2/token" \
+            --header "Content-Type: application/x-www-form-urlencoded" \
+            --data-urlencode "client_id=$HCP_CLIENT_ID" \
+            --data-urlencode "client_secret=$HCP_CLIENT_SECRET" \
+            --data-urlencode "grant_type=client_credentials" \
+            --data-urlencode "audience=https://api.hashicorp.cloud" | jq -r .access_token)
 
           SECRET_RESPONSE=$(curl -s --request GET \
             --url "$HCP_LOCATION" \
-            --header "Authorization: Bearer $ACCESS_TOKEN")
+            --header "Authorization: Bearer $HCP_API_TOKEN")
 
           MY_SECRET=$(echo $SECRET_RESPONSE | jq -r '.data.secret_value')
 
