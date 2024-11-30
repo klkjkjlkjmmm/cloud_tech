@@ -34,7 +34,7 @@ helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 Далее было необходимо установить параметры, отвечающие за экспорт метрик:
 1. `--set controller.metrics.enabled=true` включает метрики для контроллера `nginx ingress`;
 2. `--set controller.metrics.serviceMonitor.enabled=true` включает `ServiceMonitor` для `nginx ingress`, который используется для сбора метрик с подов;
-3. `--set controller.metrics.serviceMonitor.additionalLabels.release="prometheus"` добавляет метку `prometheus` (она должна совпадать с названием релиза `Prometheus`)
+3. `--set controller.metrics.serviceMonitor.additionalLabels.release="prometheus"` добавляет метку `prometheus` (она должна совпадать с названием релиза `Prometheus`).
 ```
 helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
 --namespace ingress-nginx \
