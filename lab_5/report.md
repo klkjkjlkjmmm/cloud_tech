@@ -58,7 +58,7 @@ helm upgrade prometheus prometheus-community/kube-prometheus-stack \
 ```
 kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090
 ```
-Страница успешно открылась и мы можем увидеть метрики, которые собирает `Prometheus`. Ура-ура!
+Страница успешно открылась — мы можем увидеть метрики, которые собирает `Prometheus`. Ура-ура!
 
 ![image](https://github.com/user-attachments/assets/7e889837-3bbb-4623-a9de-c9b2c810fa7a)
 
