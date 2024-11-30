@@ -36,22 +36,13 @@ jobs:
             --url "$HCP_LOCATION" \
             --header "Authorization: Bearer $HCP_API_TOKEN")
 
-          set +x
           SECRET_APP=$(echo "$SECRET_RESPONSE" | jq -r '.secrets[] | select(.name == "SECRET_APP") | .static_version.value')
           echo "::add-mask::${SECRET_APP}"
-          set -x
-
-          if [ -z "$SECRET_APP" ]; then
-            echo "Ошибка: SECRET_APP не найден"
-            exit 1
-          fi
 
           echo "SECRET_APP=***" >> $GITHUB_ENV
 
       - name: Use the secret
         run: |
-          set +x
           echo "Using the fetched secret..." > secret.txt
           cat secret.txt
-          set -x
           echo "Secret used successfully."
