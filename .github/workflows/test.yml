@@ -43,4 +43,7 @@ jobs:
           echo "SECRET_APP=$SECRET_APP" >> $GITHUB_ENV
 
       - name: Use the secret
-        run: echo "Using the fetched secret..."
+        run: |
+          set +x
+          echo "Using the fetched secret..."
+          set -x
