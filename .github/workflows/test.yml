@@ -35,10 +35,10 @@ jobs:
           SECRET_RESPONSE=$(curl -s --request GET \
             --url "$HCP_LOCATION" \
             --header "Authorization: Bearer $HCP_API_TOKEN")
-
-           echo "SECRET_RESPONSE=$SECRET_RESPONSE"
-
+           
+          set +x
           SECRET_APP=$(echo "$SECRET_RESPONSE" | jq -r '.secrets[] | select(.name == "SECRET_APP") | .static_version.value')
+          set -x
 
           echo "SECRET_APP=$SECRET_APP" >> $GITHUB_ENV
 
