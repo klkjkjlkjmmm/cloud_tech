@@ -1,0 +1,48 @@
+name: Secret Secret
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  fetch-secret:
+    runs-on: ubuntu-latest
+
+    env:
+      HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+      HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+      HCP_LOCATION: "https://api.cloud.hashicorp.com/secrets/2023-11-28/organizations/6683972e-be8c-4e46-92f8-b299e1ad7674/projects/120c304b-9f4d-4d10-a0f6-8ec1d2f0fa19/apps/cloudTech/secrets:open"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq for JSON parsing
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Fetch secret from HashiCorp Vault
+        run: |
+          echo "Fetching secret from HashiCorp Vault..."
+
+          AUTH_RESPONSE=$(curl -s --request POST \
+            --url "https://api.cloud.hashicorp.com/v1/oauth/token" \
+            --header "Content-Type: application/json" \
+            --data '{
+              "client_id": "'"$HCP_CLIENT_ID"'",
+              "client_secret": "'"$HCP_CLIENT_SECRET"'",
+              "grant_type": "client_credentials"
+            }')
+
+          ACCESS_TOKEN=$(echo $AUTH_RESPONSE | jq -r '.access_token')
+
+          SECRET_RESPONSE=$(curl -s --request GET \
+            --url "$HCP_LOCATION" \
+            --header "Authorization: Bearer $ACCESS_TOKEN")
+
+          MY_SECRET=$(echo $SECRET_RESPONSE | jq -r '.data.secret_value')
+
+          echo "MY_SECRET=$MY_SECRET" >> $GITHUB_ENV
+
+      - name: Use the secret
+        run: echo "Using the fetched secret..."
