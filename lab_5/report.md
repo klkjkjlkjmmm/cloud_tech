@@ -12,7 +12,8 @@
 Для мониторинга был выбран сервис `ingress-nginx`.
 
 
-1. Установка всего необходимого 
+### Установка всего необходимого
+
 Сначала было необходимо задеплоить `ingress-nginx`. Для этого использовалась команда `helm`.
 ```
 helm upgrade --install ingress-nginx ingress-nginx \
@@ -28,7 +29,7 @@ helm repo update
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 ```
 
-2. Настройка всего необходимого
+### Настройка всего необходимого
 
 Далее было необходимо установить параметры, отвечающие за экспорт метрик:
 1. `--set controller.metrics.enabled=true` включает метрики для контроллера `nginx ingress`;
@@ -51,7 +52,8 @@ helm upgrade prometheus prometheus-community/kube-prometheus-stack \
 --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
-3. Подключение к Prometheus
+### Подключение к Prometheus
+
 Откроем страницу `Prometheus` в браузере, перед этим совершив переброс портов.
 ```
 kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 9090:9090
@@ -59,7 +61,9 @@ kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 909
 Страница успешно открылась и мы можем увидеть метрики, которые собирает `Prometheus`. Ура-ура!
 
 ![image](https://github.com/user-attachments/assets/7e889837-3bbb-4623-a9de-c9b2c810fa7a)
-4. Подключение `Grafana`
+
+### Подключение Grafana
+
 Аналогично, перебросим порты для `Grafana`.
 ```
 kubectl port-forward svc/prometheus-grafana  3000:80 -n prometheus
@@ -71,10 +75,14 @@ kubectl port-forward svc/prometheus-grafana  3000:80 -n prometheus
 
 ![image](https://github.com/user-attachments/assets/586111e0-9281-45ba-a095-3cfc7e896f6b)
 
-Здесь можно увидеть много интересных графиков, например
+Здесь можно увидеть много интересных графиков, например:
 
 `Average Memory Usage` - показывает среднее количество используемой памяти
+
 ![image](https://github.com/user-attachments/assets/2149e31b-918c-42e3-bc13-e10e87d15293)
 
 `Average CPU Usage` - показывает среднее использование CPU
+
 ![image](https://github.com/user-attachments/assets/6690b3d1-8116-4bca-93a7-44a3a8d83215)
+
+
