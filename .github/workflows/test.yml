@@ -36,9 +36,9 @@ jobs:
             --url "$HCP_LOCATION" \
             --header "Authorization: Bearer $HCP_API_TOKEN")
 
-          MY_SECRET=$(echo $SECRET_RESPONSE | jq -r '.data.secret_value.SECRET_APP')
+          SECRET_APP=$(echo $SECRET_RESPONSE | jq -r '.data.secret_value.SECRET_APP')
 
-          echo "MY_SECRET=$MY_SECRET" >> $GITHUB_ENV
+          echo "SECRET_APP=$SECRET_APP" >> $GITHUB_ENV
 
       - name: Use the secret
         run: echo "Using the fetched secret..."
