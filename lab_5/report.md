@@ -70,20 +70,20 @@ kubectl port-forward svc/prometheus-grafana  3000:80 -n prometheus
 ```
 По адресу `localhost:3000` нас ждал красивый интерфейс `Grafana`.
 
-![image](https://github.com/user-attachments/assets/d442bd81-3e3d-4660-b7dc-d040852a4b4a)
+![photo_2024-11-24_18-04-44](https://github.com/user-attachments/assets/6eb28961-9b03-472c-a4f0-d0917b21924f)
 
 Осталось совсем немного - необходимо указать `Prometheus` в источниках данных, а также импортировать дэшборд (мы использовали вот [этот](https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json)).
 
-![image](https://github.com/user-attachments/assets/586111e0-9281-45ba-a095-3cfc7e896f6b)
+![photo_2024-11-24_18-08-37](https://github.com/user-attachments/assets/17416de5-1c55-4920-8821-e948ffa86f8f)
 
 Здесь можно увидеть много интересных графиков, например:
 
 `Average Memory Usage` - показывает среднее количество используемой памяти
 
-![image](https://github.com/user-attachments/assets/2149e31b-918c-42e3-bc13-e10e87d15293)
+![photo_2024-11-24_18-11-23](https://github.com/user-attachments/assets/a4b0b0b4-0f2c-440e-9482-6ddba0af6a00)
 
 `Average CPU Usage` - показывает среднее использование CPU
 
-![image](https://github.com/user-attachments/assets/6690b3d1-8116-4bca-93a7-44a3a8d83215)
+![photo_2024-11-24_18-11-39](https://github.com/user-attachments/assets/842535ce-b5a5-4eb3-86e5-836fd89bbf2f)
 
 
