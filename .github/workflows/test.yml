@@ -26,11 +26,11 @@ jobs:
           echo "Fetching secret from HashiCorp Vault..."
 
           HCP_API_TOKEN=$(curl --location "https://auth.idp.hashicorp.com/oauth2/token" \
-          --header "Content-Type: application/x-www-form-urlencoded" \
-          --data-urlencode "client_id=$HCP_CLIENT_ID" \
-          --data-urlencode "client_secret=$HCP_CLIENT_SECRET" \
-          --data-urlencode "grant_type=client_credentials" \
-          --data-urlencode "audience=https://api.hashicorp.cloud" | jq -r .access_token)
+            --header "Content-Type: application/x-www-form-urlencoded" \
+            --data-urlencode "client_id=$HCP_CLIENT_ID" \
+            --data-urlencode "client_secret=$HCP_CLIENT_SECRET" \
+            --data-urlencode "grant_type=client_credentials" \
+            --data-urlencode "audience=https://api.hashicorp.cloud" | jq -r .access_token)
 
           SECRET_RESPONSE=$(curl -s --request GET \
             --url "$HCP_LOCATION" \
@@ -38,15 +38,20 @@ jobs:
 
           set +x
           SECRET_APP=$(echo "$SECRET_RESPONSE" | jq -r '.secrets[] | select(.name == "SECRET_APP") | .static_version.value')
+          echo "::add-mask::${SECRET_APP}"
+          set -x
 
           if [ -z "$SECRET_APP" ]; then
             echo "Ошибка: SECRET_APP не найден"
             exit 1
           fi
 
-          echo "SECRET_APP=$SECRET_APP" >> $GITHUB_ENV
+          echo "SECRET_APP=***" >> $GITHUB_ENV
 
       - name: Use the secret
         run: |
           set +x
-          echo "Using the fetched secret..."
+          echo "Using the fetched secret..." > secret.txt
+          cat secret.txt
+          set -x
+          echo "Secret used successfully."
