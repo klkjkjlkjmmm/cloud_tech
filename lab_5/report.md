@@ -69,6 +69,7 @@ kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n prometheus 909
 kubectl port-forward svc/prometheus-grafana  3000:80 -n prometheus
 ```
 По адресу `localhost:3000` нас ждал красивый интерфейс `Grafana`.
+
 ![image](https://github.com/user-attachments/assets/d442bd81-3e3d-4660-b7dc-d040852a4b4a)
 
 Осталось совсем немного - необходимо указать `Prometheus` в источниках данных, а также импортировать дэшборд (мы использовали вот [этот](https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json)).
