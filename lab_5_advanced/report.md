@@ -5,4 +5,77 @@
 
 ## Ход работы
 
-Че-то тут мы жестко намучились...
+В лабораторной 5 было установлено и настроено почти все необходимое для этой лабораторной.
+Для этой лабы создали телеграм бота и канал NGINX alerts, в котором сделали его админом. Узнали токен и айди чата для дальнейшей работы.
+
+Сначала мы создали отдельный файл конфигурации values.yaml и мучились с ним два (2) дня. Так и не поняли толком, что не так: плохо подобрано условие отправки сообщения (его мы поменяли примерно 9438239320 раз) или мы неправильно сконфигурировали.. а может вообще не дождались просто....
+После вечера ресерча решили, что нет ничего надежнее, чем вытащить дефолтные значения, отредактировать их и апгрейднуть prometheus. Возможно, это не лучшее решение, но отчаяние взяло верх:((
+
+```
+helm get values -n monitoring prometheus-community/prometheus-kube-stack
+```
+
+В ```additionalPrometheusRulesMap``` было добавлено следующее:
+
+```
+  rule-name:
+    groups:
+    - name: ingress-nginx
+      rules:
+      - alert: chto-to slomalos
+        expr: kube_deployment_status_replicas{deployment="ingress-nginx-controller", namespace="ingress-nginx"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "smert`"
+
+```
+
+Условие алерта: 0 запущенных реплик в деплойменте ingress-nginx-controller.
+
+И были обновлены получатели. Туда добавили наш тг канал
+
+```
+route:
+  group_by: ['namespace']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'null'
+  routes:
+  - receiver: telegram
+receivers:
+  - name: 'null'
+  - name: 'telegram'
+    telegram_configs:
+      - chat_id: -1002272639933
+        bot_token: <a vot ne skazhem>
+        api_url: "https://api.telegram.org"
+        send_resolved: true
+
+```
+
+Агрейднули helm:
+
+```
+helm upgrade -n monitoring prometheus prometheus-community/kube-prometheus-stack -f default-values.yaml
+```
+
+Казалось бы, какой нормальный человек будет радоваться алертам, но когда мы зашли в Прометеус и увидели ЭТО... [читать далее..]
+![image](https://github.com/user-attachments/assets/1c80b3b1-4ba0-4f74-9de7-11a979c32717)
+
+Нашему счастью не было предела. Оставалось только надеяться на то, что в телеграм нам придет наш алерт. И вот, заветное уведомление из телеграма...
+![image](https://github.com/user-attachments/assets/6dd97464-c246-4f0a-a44f-d423b3cb8146)
+
+Жесточайше испугались, что алерт не тот, и обрадовались, что уведомления все таки ходят! Эмоциональные качели какие-то. Но это оказывается дефолтные алерты и мы продолжили ждать.
+Две минуты спустя:
+![image](https://github.com/user-attachments/assets/214aba55-8291-41ea-a7de-dcf30fa88392)
+
+Все закончилось успехом
+
+## Вывод
+
+Что хотелось бы сказать. Мы в своем познании настолько преисполнились.. 
+
+Алертманагер - круто однозначно! Удобно, и ты всегда знаешь, когда у тебя что-то упало, да и вообще можешь настроить под себя, если дефолтные алармы не устраивают. 
